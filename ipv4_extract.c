@@ -182,22 +182,13 @@ static int valid_address_token(char *token, unsigned long octets[4],
     return 0;
 }
 
-int main(void) {
-    char *line = NULL;
-    size_t cap = 0;
-    ssize_t len = getline(&line, &cap, stdin);
-
-    if (len < 0) {
-        free(line);
-        fprintf(stderr, "No input read.\n");
-        return 1;
-    }
-
-    /* Strip trailing newline, if present. */
-    while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
-        line[--len] = '\0';
-    }
-
+/*
+ * Scan one already-trimmed line for a single valid IPv4 address
+ * (optionally with a port) and print the result. Prints the
+ * "Extracted..." message and returns 1 if one was found, otherwise
+ * prints "Invalid input: no valid IPv4 address found" and returns 0.
+ */
+static int process_line(char *line, size_t len) {
     int found = 0;
     size_t i = 0;
 
@@ -217,8 +208,7 @@ int main(void) {
                 fprintf(stderr, "Out of memory.\n");
                 free(original);
                 free(working);
-                free(line);
-                return 1;
+                return -1; /* signal fatal error to caller */
             }
             memcpy(original, line + start, tok_len);
             original[tok_len] = '\0';
@@ -258,7 +248,41 @@ int main(void) {
     }
 
     if (!found) {
-        printf("No valid IPv4 address found.\n");
+        printf("Invalid input: no valid IPv4 address found\n");
+    }
+
+    return found;
+}
+
+int main(void) {
+    char *line = NULL;
+    size_t cap = 0;
+
+    for (;;) {
+        printf("Enter a string (or 'END' to quit): ");
+        fflush(stdout);
+
+        ssize_t len = getline(&line, &cap, stdin);
+        if (len < 0) {
+            /* EOF (e.g. input piped in, or Ctrl-D) */
+            printf("\nProgram terminated.\n");
+            break;
+        }
+
+        /* Strip trailing newline, if present. */
+        while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
+            line[--len] = '\0';
+        }
+
+        if (strcmp(line, "END") == 0) {
+            printf("Program terminated.\n");
+            break;
+        }
+
+        if (process_line(line, (size_t)len) < 0) {
+            /* Fatal (out-of-memory) error inside process_line(). */
+            break;
+        }
     }
 
     free(line);
