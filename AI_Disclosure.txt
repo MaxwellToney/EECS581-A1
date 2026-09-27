@@ -1,0 +1,26 @@
+9/27/26
+For my first prompt, I used Claude Sonnet 5 to first create a model for the program. This is the prompt I used:
+---------------------------------------------------------------------------------------------------------------
+Write a C program that takes a line of input and finds a valid IPv4 address somewhere in the text. 
+The address may optionally have a port number after it. The program should ignore any character that is not 0-9, periods, or colons. 
+When checking any possible address, the entire token must be valid, don't accept only part of a longer sequence. 
+A valid IPv4 address has four octets separated by periods. Each octet must contain 1-3 digits, 
+have a value between 0 and 225, and not have leading zeros unless the octet is exactly 0. 
+If a port number is present after a colon, it must contain 1-5 digits, 
+have a value between 0 and 65535, and not have a leading zero unless the port is exactly zero. 
+If the port is invalid, the entire address is invalid. The program should extract and report ONLY fully valid IPv4 addresses.
+---------------------------------------------------------------------------------------------------------------
+The program seemed to be working mostly as intended. The test cases were turning out positive, with some extra output requirements not being what they need to be.
+
+9/27/26
+My next prompt was to ensure additional requirements, such as not using parsing library functions and output demands were being met. This is the prompt I used:
+---------------------------------------------------------------------------------------------------------------
+Continuing on, reject tokens with incorrect octet counts, empty octets, extra periods or colons, out-of-range values, 
+leading zeros, or punctuation directly attached to an otherwise valid address. 
+Additionally, do NOT use any string-to-integer conversion functions, such as atoi, strtol, stoi, etc. 
+Do NOT use any networking/address-parsing funcitons, such as inet_aton, inet_pton, or inet_addr. 
+Do NOT use any regular-expression library. Standard character checks, like isdigit(), are allowed. 
+When a valid address is found, print "Extracted IPv4 address: A.B.C.D (decimal value: N, port: P), where: 
+A.B.C.D is the IPv4 address, N is its 32-bit decimal representation, and P is either the port number or the word "none". 
+Assume that only one valid IPv4 address can appear in any input line.
+---------------------------------------------------------------------------------------------------------------
