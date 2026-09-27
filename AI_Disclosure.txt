@@ -24,3 +24,18 @@ When a valid address is found, print "Extracted IPv4 address: A.B.C.D (decimal v
 A.B.C.D is the IPv4 address, N is its 32-bit decimal representation, and P is either the port number or the word "none". 
 Assume that only one valid IPv4 address can appear in any input line.
 ---------------------------------------------------------------------------------------------------------------
+After running the prompt and testing the program, I reran through various test cases to ensure the program is working as intended. Here were some of the test cases and their outputs:
+---------------------------------------------------------------------------------------------------------------
+192.168.1.1 -	Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)
+225.225.225.225 -	Extracted correctly, decimal 3789677025
+226.1.1.1 -	no match
+0.0.0.0	- decimal value: 0, port: none
+1.2.3 - no match
+1..2.3.4 - no match
+1.2.3.4. - no match
+1.2.3.4:8080:9090 - no match
+!!1.2.3.4,, -	Correctly extracts 1.2.3.4
+8.8.8.8 and 1.1.1.1:53 - Only the first (8.8.8.8) is reported, per the "assume one address" rule
+---------------------------------------------------------------------------------------------------------------
+I acknowledge that I have reviewed over the generated code and vouch that I understand every line's purpose.
+I tested the program numerous times, with given test cases and some of my own, and it works as intended. From my findings, I have found no bugs or issues with the program's logic.
