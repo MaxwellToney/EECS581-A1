@@ -9,8 +9,10 @@ have a value between 0 and 225, and not have leading zeros unless the octet is e
 If a port number is present after a colon, it must contain 1-5 digits, 
 have a value between 0 and 65535, and not have a leading zero unless the port is exactly zero. 
 If the port is invalid, the entire address is invalid. The program should extract and report ONLY fully valid IPv4 addresses.
+Continuously loop the user for an input until "END" is entered, then terminate the program.
 ---------------------------------------------------------------------------------------------------------------
 The program seemed to be working mostly as intended. The test cases were turning out positive, with some extra output requirements not being what they need to be.
+At this point I had realized I had the code stop accepting at "225" and not "255", which was not intended. This issue has been resolved.
 
 9/27/26
 My next prompt was to ensure additional requirements, such as not using parsing library functions and output demands were being met. This is the prompt I used:
@@ -27,8 +29,8 @@ Assume that only one valid IPv4 address can appear in any input line.
 After running the prompt and testing the program, I reran through various test cases to ensure the program is working as intended. Here were some of the test cases and their outputs:
 ---------------------------------------------------------------------------------------------------------------
 192.168.1.1 -	Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)
-225.225.225.225 -	Extracted correctly, decimal 3789677025
-226.1.1.1 -	no match
+255.255.255.255 -	Extracted correctly, decimal 3789677025
+256.1.1.1 -	no match
 0.0.0.0	- decimal value: 0, port: none
 1.2.3 - no match
 1..2.3.4 - no match
